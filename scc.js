@@ -32,8 +32,10 @@ function main() {
         }
         // console.log(graph['1']);
         var sccs = kosarajus(graph);
-        sccs = sccs.filter(scc => scc.length > 31);
-        console.log(sccs[0].length), console.log(sccs[1].length), console.log(sccs[2].length), console.log(sccs[3].length);
+        // console.log(Object.keys(sccs).length);
+        console.log(sccs);
+        // sccs = sccs.filter(scc => scc.length > 31);
+        // console.log(sccs[0].length), console.log(sccs[1].length), console.log(sccs[2].length), console.log(sccs[3].length);
     });
 }
 
@@ -63,11 +65,11 @@ class Stack {
     }
 }
 function kosarajus(graph) {
-    let stack = new Stack();
-    let visited = {};
-    let sccs = {};
-    let reversedGraph = reverseGraphf(graph);
-    function DFS(graph, vertex, visited, scc = null) {
+    var stack = new Stack();
+    var visited = {};
+    var sccs = {};
+    const reversedGraph = reverseGraphf(graph);
+    function DFS(graph, vertex, visited, scc = []) {
         visited[vertex] = true;
         
         for (let neighbor in graph[vertex]) {
@@ -77,11 +79,11 @@ function kosarajus(graph) {
             }
         }
         
-        if (scc !== null) {
+        if (scc.length > 0 ) {
             sccs[vertex] = scc;
         }
         
-        }
+        
     }
     function reverseGraphf(graph) {
         const reversedGraph = {};
@@ -120,7 +122,7 @@ function kosarajus(graph) {
         if (!visited[vertex]) {
             let scc = [];
             DFS(graph, vertex, visited, scc);
-            sccs.push(scc);
+            sccs[vertex] = scc;
         }
     }
     return sccs;
