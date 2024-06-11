@@ -33,8 +33,14 @@ function main() {
         // console.log(graph['1']);
         var sccs = kosarajus(graph);
         // console.log(Object.keys(sccs).length);
+        // console.log(sccs);
+        sccs = Object.entries(sccs).reduce((acc, [key, list]) => {
+            if (list.length > 1) {
+                acc[key] = list;
+            }
+            return acc;
+        }, {});
         console.log(sccs);
-        // sccs = sccs.filter(scc => scc.length > 31);
         // console.log(sccs[0].length), console.log(sccs[1].length), console.log(sccs[2].length), console.log(sccs[3].length);
     });
 }
@@ -71,23 +77,24 @@ function kosarajus(graph) {
     const reversedGraph = reverseGraphf(graph);
     function DFS(graph, vertex, visited, scc, pass) {
         visited[vertex] = true;
-
-        if(typeof scc === 'undefined') {
+    
+        if(typeof scc == 'undefined') {
             scc = [];
         }
         
-        for (let neighbor of graph[vertex]) {
+        
+        for (let neighbor in graph[vertex]) {
             if (!visited[neighbor]) {
-                
                 scc.push(neighbor);  
-                
                 return DFS(graph, neighbor, visited, scc);
             }
+        
+        
         }
-        if (pass !== '2') {
-            return scc;
-        }else{
+        if(pass === '1'){
             stack.push(vertex);
+        }else{
+            return scc;
         }
         
         
@@ -119,6 +126,7 @@ function kosarajus(graph) {
     
         return reversedGraph;
     }
+    // first pass
     for (let vertex in reversedGraph) {
         if (!visited[vertex]) {
             DFS(reversedGraph, vertex, visited, undefined, '1');
